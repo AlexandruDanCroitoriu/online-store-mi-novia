@@ -64,6 +64,18 @@ services:
         labels:
             - "io.vendure.create.name=online-store-mi-novia"
 
+    dbgate:
+        image: dbgate/dbgate:latest
+        container_name: dbgate
+        ports:
+            - "8888:3000"
+        volumes:
+            - dbgate_data:/dbgate
+        depends_on:
+            - postgres_db
+        labels:
+            - "io.vendure.create.name=online-store-mi-novia"
+
     # RECOMMENDED
     # Want to use Typesense instead of our default search engine?
     # Checkout our advanced search plugin: https://vendure.io/hub/vendure-plus-advanced-search-plugin
@@ -128,6 +140,10 @@ volumes:
         labels:
             - "io.vendure.create.name=online-store-mi-novia"
     redis_data:
+        driver: local
+        labels:
+            - "io.vendure.create.name=online-store-mi-novia"
+    dbgate_data:
         driver: local
         labels:
             - "io.vendure.create.name=online-store-mi-novia"
