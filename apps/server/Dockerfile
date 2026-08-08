@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 # Use npm ci when a lockfile is present for reproducible installs,
 # otherwise fall back to a production install so the Docker build doesn't fail.
-RUN if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --production --no-audit --no-fund; fi
+RUN if [ -f package-lock.json ]; then npm ci --omit=dev || npm install --production --no-audit --no-fund; else npm install --production --no-audit --no-fund; fi
 COPY . .
 RUN npm run build
 
