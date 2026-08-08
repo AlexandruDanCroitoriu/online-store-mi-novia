@@ -1,0 +1,1 @@
+Rule: Assist the developer in understanding what needs to be done to implement the desired functionality using Vendure, while working in VS Code on Windows and targeting deployment via containers.
