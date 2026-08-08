@@ -17,7 +17,7 @@ on:
 
 jobs:
   build-storefront:
-    name: Build Storefront
+    name: Build and publish Storefront image
     runs-on: ubuntu-latest
 
     steps:
@@ -39,3 +39,33 @@ jobs:
         run: npm run build:storefront
         env:
           VENDURE_SHOP_API_URL: https://readonlydemo.vendure.io/shop-api
+
+      - name: Extract metadata
+        id: meta
+        run: |
+          echo "SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to Docker Hub
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        if: github.event_name == 'push'
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push storefront image
+        if: github.event_name == 'push'
+        uses: docker/build-push-action@v6
+        with:
+          context: apps/storefront
+          file: apps/storefront/Dockerfile
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/dokploy-storefront:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/dokploy-storefront:${{ steps.meta.outputs.SHORT_SHA }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
