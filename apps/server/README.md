@@ -8,7 +8,7 @@ Useful links:
 - [Vendure Discord community](https://www.vendure.io/community)
 - [Vendure on GitHub](https://github.com/vendurehq/vendure)
 - [Vendure plugin template](https://github.com/vendurehq/plugin-template)
-
+ 
 ## Directory structure
 
 * `/src` contains the source code of your Vendure server. All your custom code and plugins should reside here.
